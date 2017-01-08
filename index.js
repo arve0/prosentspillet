@@ -210,7 +210,10 @@ function Question () {
   return { el, correct, wrong };
 }
 
-function generateQuestion () {
+function generateQuestion (retries) {
+  if (retries > 100) {
+    throw new Error('Unable to generate question, tried 100 times.');
+  }
   var settings = state.get('settings');
 
   var factorType = settings.growth ? 'vekst':'prosent';
@@ -218,7 +221,7 @@ function generateQuestion () {
 
   var lucky = pick(settings.names);
 
-  // avoid several increases upon several keydown
+  // avoid several increases upon multiple keydowns / button clicks
   var countIfCorrect = lucky.count + 1;
   function correct () {
     lucky.count = countIfCorrect;
@@ -238,6 +241,11 @@ function generateQuestion () {
     var up = randomInteger(0, 1);
     text += up ? ' oppgang' : ' nedgang';
     answer = up ? 1 + answer : 1 - answer;
+  }
+  if (answer < 0) {
+    console.warn('Answer below zero, generating new question');
+    // try again, recursive
+    return generateQuestion(++retries || 1);
   }
   answer = settings.comma ? answer.toFixed(3) : answer.toFixed(2);
 
