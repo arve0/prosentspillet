@@ -14,3 +14,11 @@ label {
 .btn {
   margin-right: 10px;
 }
+
+#preview {
+  padding: 20px;
+}
+
+#preview h1 {
+  font-size: 22px;
+}
