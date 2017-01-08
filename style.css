@@ -1,0 +1,16 @@
+button {
+  margin-top: 5px;
+}
+
+label {
+  font-weight: bold;
+}
+
+.container {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.btn {
+  margin-right: 10px;
+}

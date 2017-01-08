@@ -1,0 +1,27 @@
+{
+  "name": "prosentspillet",
+  "version": "1.0.0",
+  "description": "Spill for mengdetrening i prosent- og vekstfaktor",
+  "main": "build.js",
+  "scripts": {
+    "build": "node build.js",
+    "prebuild": "npm run test",
+    "test": "eslint *.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arve0/prosentspillet.git"
+  },
+  "keywords": [
+    "prosent",
+    "spill",
+    "vekstfaktor",
+    "prosentfaktor"
+  ],
+  "author": "Arve Seljebu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arve0/prosentspillet/issues"
+  },
+  "homepage": "https://github.com/arve0/prosentspillet#readme"
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Prosentspillet</title>
+    <meta charset="UTF-8">
+    <link data-require="bootstrap@4.0.5" data-semver="4.0.5" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" />
+    <style></style>
+  </head>
+  <body>
+    <div class="container">
+      <h3>Prosentspillet</h3>
+      <br />
+      Regn deg frem til riktig vekst- og prosentfaktor.
+      <br />
+      <br />
+      Tilfeldige elever blir plukket ut. De som svarer riktig blir ikke plukket på nytt før alle de andre har svart riktig også.
+      <br />
+      <br />
+      <label>Navn på spillere         <small>separert med komma eller ny linje</small>
+      </label>
+      <textarea type="text" class="form-control" id="names" rows="8">Arve
+Knut</textarea>
+      <label>Tilfeldige tall fra         <input type="number" value="1" id="from" class="form-control" />
+      </label>
+      <br />
+      <label>Til         <input type="number" value="100" id="to" class="form-control" />
+      </label>
+      <br />
+      <label>Komma         <input type="checkbox" id="comma" />
+      </label>
+      <br />
+      <label>Vekstfaktor         <input type="checkbox" id="growth" />
+      </label>
+      <br />
+      <label>Reverser         <input type="checkbox" id="reverse" />
+      </label>
+      <br />
+      <label>Tidsfrist         <small>(i sekund)</small>
+        <input type="number" value="10" id="timeout" class="form-control" />
+      </label>
+      <br />
+      <button class="btn btn-primary" id="start">Start!</button><br /><br />
+      <strong>Hvordan spille?</strong>
+      <ul>
+        <li>Legg inn navn til elevene i feltet under.</li>
+        <li>Trykk på <b>Start</b>.</li>
+        <li>Spørsmål og navn på elev dukker opp.</li>
+        <li>Eleven svarer på spørsmålet.</li>
+        <li>Du velger <b>Feil</b> eller <b>Riktig</b>, avhengig av svaret til eleven.</li>
+        <li>Du kan også bruke knappene på tastaturet, <b>f</b> eller <b>r</b>.</li>
+        <li>Når en elev har svart riktig, blir eleven ikke trukket på ny før alle andre elever har svart riktig også.</li>
+        <li>Spillet fortsetter med neste tilfeldige elev.</li>
+      </ul>
+      <strong>Kan man endre tidsfristen, hvilke tall som plukkes, osv?</strong>
+      <br />
+      Du kan endre på innstillingene før spillet starter. Hvis du går tilbake huskes forrige spill med navn og innstillinger. Du kan da endre det du ønsker og starte på nytt.
+      <br />
+      <br />
+      <strong>Kan jeg ta vare på et spill? Det er så tungvindt å skrive inn alle navnene.</strong>
+      <br />
+      Nettleseren husker navn og innstillinger for siste spill, men du kan også kopiere adressen i adressefeltet <b>etter</b> du har startet spillet.
+      <br />
+      <br />
+      <strong>Kan jeg sende spillet med innstillinger til en annen PC?</strong>
+      <br />
+      Kopier adressen i adressefeltet <b>etter</b> du har startet spillet. Denne adressen kan du sende til kollegaer eller bruke på en annen PC.
+    </div>
+    <script></script>
+  </body>
+</html>
