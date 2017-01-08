@@ -16,6 +16,7 @@
       I dette spillet blir tilfeldige elever blir plukket ut til å svare på spørsmål om prosent- og vekstfaktor. De som svarer riktig blir ikke trukket på nytt før alle de andre har svart riktig også.
       <br />
       <br />
+      <form>
       <label>Navn på spillere         <small>separert med komma eller ny linje</small>
       </label>
       <textarea type="text" class="form-control" id="names" rows="8">Arve
@@ -38,8 +39,10 @@ Knut</textarea>
       <label>Tidsfrist         <small>(i sekund)</small>
         <input type="number" value="10" id="timeout" class="form-control" />
       </label>
+      </form>
       <br />
       <button class="btn btn-primary" id="start">Start!</button><br /><br />
+      <div id="preview"></div>
       <strong>Hvordan spille?</strong>
       <ul>
         <li>Legg inn navn til elevene i feltet under.</li>
