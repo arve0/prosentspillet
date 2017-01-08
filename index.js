@@ -24,8 +24,8 @@ if (location.hash !== '') {
   };
   form.addEventListener('click', preview);
   form.addEventListener('keyup', preview);
-  preview();
   setGameSettings(state.get('settings'));
+  preview();
 }
 
 function preview () {
