@@ -92,7 +92,9 @@ Knut</textarea>
       <br />
       Kopier adressen i adressefeltet <b>etter</b> du har startet spillet. Denne adressen kan du sende til kollegaer eller bruke på en annen PC.
     </div>
-    <script>/**
+    <script>'use strict';
+
+/**
  * Copyright Arve Seljebu
  *
  * http://jsbin.com/dafocu/edit
@@ -122,7 +124,7 @@ if (location.hash !== '') {
   setGameSettings(state.get('settings'));
 }
 
-function preview () {
+function preview() {
   state.set('settings', readGameSettings());
   var preview = document.getElementById('preview');
   var question = generateQuestion();
@@ -132,7 +134,7 @@ function preview () {
 }
 
 // Any hashchange should reload game
-window.addEventListener('hashchange', () => {
+window.addEventListener('hashchange', function () {
   if (location.hash === '') {
     location.reload();
   } else {
@@ -140,7 +142,7 @@ window.addEventListener('hashchange', () => {
   }
 });
 
-function loadHash () {
+function loadHash() {
   try {
     var settings = JSON.parse(atob(location.hash.slice(1)));
     if (!settings.names.length) {
@@ -155,24 +157,52 @@ function loadHash () {
 }
 
 // { comma: true, growth: true, reverse: false, from: 0, to: 100 }
-function readGameSettings () {
+function readGameSettings() {
   var inputs = ['comma', 'growth', 'reverse', 'from', 'to', 'timeout'];
   var settings = {};
-  for (var key of inputs) {
-    var el = document.getElementById(key);
-    if (el.type === 'checkbox') {
-      settings[key] = el.checked;
-    } else if (el.type === 'number') {
-      settings[key] = parseFloat(el.value);
-    } else {
-      settings[key] = el.value;
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = inputs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var key = _step.value;
+
+      var el = document.getElementById(key);
+      if (el.type === 'checkbox') {
+        settings[key] = el.checked;
+      } else if (el.type === 'number') {
+        settings[key] = parseFloat(el.value);
+      } else {
+        settings[key] = el.value;
+      }
+    }
+
+    // 'arve, knut' => [ {name: arve, count:0}, {name: knut, count:0} ]
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
     }
   }
 
-  // 'arve, knut' => [ {name: arve, count:0}, {name: knut, count:0} ]
   var input = document.getElementById('names');
-  var names = input.value.split(/[,\n]/).map(n => n.trim()).filter(n => n !== '');
-  names = names.map(n => ({ name: n, count: 0 }));
+  var names = input.value.split(/[,\n]/).map(function (n) {
+    return n.trim();
+  }).filter(function (n) {
+    return n !== '';
+  });
+  names = names.map(function (n) {
+    return { name: n, count: 0 };
+  });
   settings.names = names;
 
   return settings;
@@ -181,7 +211,7 @@ function readGameSettings () {
 /**
  * @param settings {object} Properties: comma, growth, reverse, from, to.
  */
-function setGameSettings (settings) {
+function setGameSettings(settings) {
   for (var key in settings) {
     if (!settings.hasOwnProperty(key)) {
       continue;
@@ -190,7 +220,9 @@ function setGameSettings (settings) {
       if (typeof settings[key] === 'boolean') {
         document.getElementById(key).checked = settings[key];
       } else if (key === 'names') {
-        document.getElementById(key).innerHTML = settings[key].map(n => n.name).join('\n');
+        document.getElementById(key).innerHTML = settings[key].map(function (n) {
+          return n.name;
+        }).join('\n');
       } else {
         document.getElementById(key).value = settings[key];
       }
@@ -201,14 +233,14 @@ function setGameSettings (settings) {
   }
 }
 
-function startGame () {
+function startGame() {
   form.removeEventListener('click', preview);
   form.removeEventListener('keyup', preview);
   container.innerHTML = '';
   container.appendChild(Game());
 }
 
-function Game () {
+function Game() {
   var el = document.createElement('div');
 
   var question = Question();
@@ -218,7 +250,7 @@ function Game () {
   el.appendChild(CorrectBtn());
   el.appendChild(ResetBtn());
 
-  function WrongBtn () {
+  function WrongBtn() {
     var el = document.createElement('button');
     el.innerHTML = 'Feil';
     el.classList = 'btn btn-danger';
@@ -226,7 +258,7 @@ function Game () {
     return el;
   }
 
-  function CorrectBtn () {
+  function CorrectBtn() {
     var el = document.createElement('button');
     el.innerHTML = 'Riktig';
     el.classList = 'btn btn-success';
@@ -234,39 +266,41 @@ function Game () {
     return el;
   }
 
-  function ResetBtn () {
+  function ResetBtn() {
     var el = document.createElement('button');
     el.innerHTML = 'Start nytt spill';
     el.classList = 'btn btn-primary';
-    el.onclick = () => location.hash = '';
+    el.onclick = function () {
+      return location.hash = '';
+    };
     return el;
   }
 
   return el;
 }
 
-function Question () {
+function Question() {
   var settings = state.get('settings');
   var el = document.createElement('div');
   el.className = 'jumbotron';
 
   var question, answerTimeout;
-  function next () {
+  function next() {
     el.style.backgroundColor = '';
     question = generateQuestion();
     el.innerHTML = QuestionHTML(question);
     answerTimeout = setTimeout(wrong, settings.timeout * 1000);
   }
 
-  function showAnswer () {
-    clearTimeout(answerTimeout);  // if correct, cancel answer timeout
+  function showAnswer() {
+    clearTimeout(answerTimeout); // if correct, cancel answer timeout
     el.innerHTML = QuestionHTML(question, question.answer);
     setTimeout(next, 1500);
   }
 
   // avoid double registration
   var debounce = Date.now() - 1500;
-  function debounceOK () {
+  function debounceOK() {
     if (Date.now() - debounce > 1500) {
       debounce = Date.now();
       return true;
@@ -274,7 +308,7 @@ function Question () {
     return false;
   }
 
-  function correct () {
+  function correct() {
     if (debounceOK()) {
       showAnswer();
       question.correct();
@@ -282,15 +316,15 @@ function Question () {
     }
   }
 
-  function wrong () {
+  function wrong() {
     if (debounceOK()) {
       showAnswer();
-      el.style.backgroundColor = '#f77';  // light red
+      el.style.backgroundColor = '#f77'; // light red
     }
   }
 
   next();
-  window.addEventListener('keydown', (event) => {
+  window.addEventListener('keydown', function (event) {
     if (event.keyCode === 82) {
       // r -> correct
       correct();
@@ -301,20 +335,20 @@ function Question () {
     }
   });
 
-  return { el, correct, wrong };
+  return { el: el, correct: correct, wrong: wrong };
 }
 
-function generateQuestion () {
+function generateQuestion() {
   var settings = state.get('settings');
 
-  var factorType = settings.growth ? 'vekst':'prosent';
-  var title = `Hva er ${factorType}faktoren?`;
+  var factorType = settings.growth ? 'vekst' : 'prosent';
+  var title = 'Hva er ' + factorType + 'faktoren?';
 
   var lucky = pick(settings.names);
 
   // avoid several increases upon several keydown
   var countIfCorrect = lucky.count + 1;
-  function correct () {
+  function correct() {
     lucky.count = countIfCorrect;
   }
 
@@ -339,24 +373,22 @@ function generateQuestion () {
     var temp = answer;
     answer = text;
     text = temp;
-    title = `Hva er ${factorType}en til faktoren?`;
+    title = 'Hva er ' + factorType + 'en til faktoren?';
   }
 
-  return { who: lucky.name, lucky, title, text, answer, correct };
+  return { who: lucky.name, lucky: lucky, title: title, text: text, answer: answer, correct: correct };
 }
 
-function QuestionHTML (question, answer = '') {
-  return `<div>
-    <h1>${question.title}</h1><br>
-    <h1>${question.who}</h1><br>
-    <h1>${question.text} = ${answer}</h1><br>
-  </div>`;
+function QuestionHTML(question) {
+  var answer = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+  return '<div>\n    <h1>' + question.title + '</h1><br>\n    <h1>' + question.who + '</h1><br>\n    <h1>' + question.text + ' = ' + answer + '</h1><br>\n  </div>';
 }
 
-function State () {
+function State() {
   var state = retrieve();
 
-  function retrieve () {
+  function retrieve() {
     try {
       return JSON.parse(localStorage.getItem('state')) || {};
     } catch (e) {
@@ -364,22 +396,28 @@ function State () {
     }
   }
 
-  function set (key, val) {
+  function set(key, val) {
     state[key] = val;
     localStorage.setItem('state', JSON.stringify(state));
   }
 
-  function get (key) {
+  function get(key) {
     return state[key];
   }
 
   return { retrieve: retrieve, set: set, get: get };
 }
 
-function pick (arr) {
-  var counts = arr.map(item => item.count);
-  var min = counts.reduce((m, c) => c < m ? c : m, counts[0]);
-  var filtered = arr.filter(item => item.count === min);
+function pick(arr) {
+  var counts = arr.map(function (item) {
+    return item.count;
+  });
+  var min = counts.reduce(function (m, c) {
+    return c < m ? c : m;
+  }, counts[0]);
+  var filtered = arr.filter(function (item) {
+    return item.count === min;
+  });
   var r = Math.random() * filtered.length;
   var lucky = filtered[Math.floor(r)];
   return lucky;
@@ -388,11 +426,10 @@ function pick (arr) {
 /**
  * Range is including from and to.
  */
-function randomInteger (from, to) {
-  var diff = Math.abs(to - from ) + 1;
+function randomInteger(from, to) {
+  var diff = Math.abs(to - from) + 1;
   var r = Math.random() * diff + from;
   return Math.floor(r);
-}
-</script>
+}</script>
   </body>
 </html>
