@@ -65,7 +65,7 @@ function loadHash () {
 function readGameSettings () {
   var inputs = ['comma', 'growth', 'reverse', 'from', 'to', 'timeout'];
   var settings = {};
-  for (var key of inputs) {
+  inputs.forEach((key) => {
     var el = document.getElementById(key);
     if (el.type === 'checkbox') {
       settings[key] = el.checked;
@@ -74,7 +74,7 @@ function readGameSettings () {
     } else {
       settings[key] = el.value;
     }
-  }
+  });
 
   // 'arve, knut' => [ {name: arve, count:0}, {name: knut, count:0} ]
   var input = document.getElementById('names');
