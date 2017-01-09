@@ -106,10 +106,7 @@ var state = State();
 var container = document.getElementsByClassName('container')[0];
 var form = document.getElementsByTagName('form')[0];
 
-// If hash upon load -> start game with given settings in hash
-if (location.hash !== '') {
-  loadHash();
-} else {
+if (isStartPage()) {
   var btn = document.getElementById('start');
   btn.onclick = function () {
     var settings = readGameSettings();
@@ -124,6 +121,9 @@ if (location.hash !== '') {
   form.addEventListener('keyup', preview);
   setGameSettings(state.get('settings'));
   preview();
+} else {
+  // If hash upon load -> start game with given settings in hash
+  loadHash();
 }
 
 function preview() {
@@ -137,7 +137,7 @@ function preview() {
 
 // Any hashchange should reload game
 window.addEventListener('hashchange', function () {
-  if (location.hash === '') {
+  if (isStartPage()) {
     location.reload();
   } else {
     loadHash();
@@ -424,6 +424,10 @@ function randomInteger(from, to) {
   var diff = Math.abs(to - from) + 1;
   var r = Math.random() * diff + from;
   return Math.floor(r);
+}
+
+function isStartPage() {
+  return !location.hash || location.hash === '' || location.hash === '#';
 }</script>
   </body>
 </html>
