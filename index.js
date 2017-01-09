@@ -56,7 +56,8 @@ function loadHash () {
     startGame();
   } catch (e) {
     // failed -> reset, hashchange event will reload page
-    location.hash = '';
+    console.error(e);
+    setTimeout(() => location.hash = '', 1000);
   }
 }
 
@@ -127,7 +128,8 @@ function Game () {
   function WrongBtn () {
     var el = document.createElement('button');
     el.innerHTML = 'Feil';
-    el.classList = 'btn btn-danger';
+    el.classList.add('btn');
+    el.classList.add('btn-danger');
     el.onclick = question.wrong;
     return el;
   }
@@ -135,7 +137,8 @@ function Game () {
   function CorrectBtn () {
     var el = document.createElement('button');
     el.innerHTML = 'Riktig';
-    el.classList = 'btn btn-success';
+    el.classList.add('btn');
+    el.classList.add('btn-success');
     el.onclick = question.correct;
     return el;
   }
@@ -143,7 +146,8 @@ function Game () {
   function ResetBtn () {
     var el = document.createElement('button');
     el.innerHTML = 'Start nytt spill';
-    el.classList = 'btn btn-primary';
+    el.classList.add('btn');
+    el.classList.add('btn-primary');
     el.onclick = () => location.hash = '';
     return el;
   }
