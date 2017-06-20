@@ -15,7 +15,7 @@ if (isStartPage()) {
     state.set('settings', settings);
 
     if (settings.names.length) {
-      location.hash = '#' + btoa(JSON.stringify(state.get('settings')));
+      location.hash = '#' + b64Encode(JSON.stringify(state.get('settings')));
       startGame();
     }
   };
@@ -48,7 +48,7 @@ window.addEventListener('hashchange', () => {
 
 function loadHash () {
   try {
-    var settings = JSON.parse(atob(location.hash.slice(1)));
+    var settings = JSON.parse(b64Decode(location.hash.slice(1)));
     if (!settings.names.length) {
       throw new Error();
     }
@@ -314,4 +314,21 @@ function randomInteger (from, to) {
 
 function isStartPage () {
   return !location.hash || location.hash === '' || location.hash === '#';
+}
+
+function b64Encode (str) {
+    // first we use encodeURIComponent to get percent-encoded UTF-8,
+    // then we convert the percent encodings into raw bytes which
+    // can be fed into btoa.
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+        function toSolidBytes(match, p1) {
+            return String.fromCharCode('0x' + p1);
+    }));
+}
+
+function b64Decode (str) {
+    // Going backwards: from bytestream, to percent-encoding, to original string.
+    return decodeURIComponent(atob(str).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
 }
