@@ -121,9 +121,19 @@ function Game () {
   var question = Question();
   el.appendChild(question.el);
 
+  el.appendChild(ShowBtn());
   el.appendChild(WrongBtn());
   el.appendChild(CorrectBtn());
   el.appendChild(ResetBtn());
+
+  function ShowBtn () {
+    var el = document.createElement('button');
+    el.innerHTML = 'Vis svar';
+    el.classList.add('btn');
+    el.classList.add('btn-info');
+    el.onclick = question.show;
+    return el;
+  }
 
   function WrongBtn () {
     var el = document.createElement('button');
@@ -171,13 +181,13 @@ function Question () {
   function showAnswer () {
     clearTimeout(answerTimeout);  // if correct, cancel answer timeout
     el.innerHTML = QuestionHTML(question, question.answer);
-    setTimeout(next, 1500);
+    setTimeout(next, 2000);
   }
 
   // avoid double registration
-  var debounce = Date.now() - 1500;
+  var debounce = Date.now() - 2000;
   function debounceOK () {
-    if (Date.now() - debounce > 1500) {
+    if (Date.now() - debounce > 2000) {
       debounce = Date.now();
       return true;
     }
@@ -199,6 +209,12 @@ function Question () {
     }
   }
 
+  function show () {
+    if (debounceOK()) {
+      el.innerHTML = QuestionHTML(question, question.answer);
+    }
+  }
+
   next();
   window.addEventListener('keydown', (event) => {
     if (event.keyCode === 82) {
@@ -209,9 +225,13 @@ function Question () {
       // f -> wrong
       wrong();
     }
+    if (event.keyCode === 86) {
+      // v -> vis
+      show();
+    }
   });
 
-  return { el, correct, wrong };
+  return { el, correct, wrong, show };
 }
 
 function generateQuestion (retries) {
@@ -223,7 +243,8 @@ function generateQuestion (retries) {
   var factorType = settings.growth ? 'vekst':'prosent';
   var title = `Hva er ${factorType}faktoren?`;
 
-  var lucky = pick(settings.names);
+  var namesRemaining = getNamesRemaining(settings.names)
+  var lucky = pick(namesRemaining);
 
   // avoid several increases upon multiple keydowns / button clicks
   var countIfCorrect = lucky.count + 1;
@@ -260,7 +281,7 @@ function generateQuestion (retries) {
     title = `Hva er ${factorType}en til faktoren?`;
   }
 
-  return { who: lucky.name, lucky, title, text, answer, correct };
+  return { who: lucky.name, lucky, title, text, answer, correct, namesRemaining };
 }
 
 function QuestionHTML (question, answer = '') {
@@ -268,6 +289,7 @@ function QuestionHTML (question, answer = '') {
     <h1>${question.title}</h1><br>
     <h1>${question.who}</h1><br>
     <h1>${question.text} = ${answer}</h1><br>
+    <span>Gjenstår: ${question.namesRemaining.map(n => n.name).join(', ')}.</span>
   </div>`;
 }
 
@@ -294,12 +316,15 @@ function State () {
   return { retrieve: retrieve, set: set, get: get };
 }
 
-function pick (arr) {
+function getNamesRemaining (arr) {
   var counts = arr.map(item => item.count);
   var min = counts.reduce((m, c) => c < m ? c : m, counts[0]);
-  var filtered = arr.filter(item => item.count === min);
-  var r = Math.random() * filtered.length;
-  var lucky = filtered[Math.floor(r)];
+  return arr.filter(item => item.count === min);
+}
+
+function pick (arr) {
+  var r = Math.random() * arr.length;
+  var lucky = arr[Math.floor(r)];
   return lucky;
 }
 
