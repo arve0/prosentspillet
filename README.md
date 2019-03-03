@@ -8,7 +8,7 @@ enten må de ha fasit tilgjengelig eller så må lærer hjelpe til.
 Dette er tungvindt og kjedelig, både for elev og lærer. Prosentspillet kan
 være en fin måte å bryte opp og få variasjon i undervisningen.
 
-[Spill prosentspillet her!](http://seljebu.no/prosentspillet/)
+[Spill prosentspillet her!](https://arve0.github.io/prosentspillet/)
 
 ## Utvikling
 - Last ned koden
